@@ -1,0 +1,5 @@
+<?php
+// Some code to be executed
+echo "Hello, world!";
+?>
+
