@@ -1,5 +1,31 @@
 <?php
 
+/* =====================================
+             Variables
+   =====================================*/ 
+
+$nameErr = "";
+$name = "";
+$emailErr = "";
+$email = "";
+
+/* =====================================
+     Functions to filter user inputs
+   =====================================*/ 
+
+function filterName($field){
+    
+    // Sanitize user name
+    $field = filter_var(trim($field), FILTER_SANITIZE_STRING);
+    
+    // Validate user name
+    if(filter_var($field, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
+        return $field;
+    } else{
+        return FALSE;
+    }
+}  
+
 function filterEmail($field){
 
     // Sanitize e-mail address
@@ -13,11 +39,21 @@ function filterEmail($field){
     }
 }
 
-$emailErr = "";
-$email = "";
+/* =================================================
+      Processing form data when form is submitted
+   =================================================*/ 
 
-// Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    // Validate name
+    if(empty($_POST["name"])){
+        $nameErr = "Please enter your name.";
+    } else{
+        $name = filterName($_POST["name"]);
+        if($name == FALSE){
+            $nameErr = "Please enter a valid name.";
+        }
+    }
         
     // Validate email address
     if(empty($_POST["email"])){
@@ -52,14 +88,26 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
             <div class="eight wide computer eight wide tablet sixteen wide mobile column">
                 <form class="ui form" action="17.1-contact-form.php" method="post">
+
+                    <!-- Full name -->
                     <div class="field">
-                        <label>Full name</label>
-                        <input name="name" type="text">
+                        <label>Full name*</label>
+                        <input name="name" type="text" value="<?php echo $name; ?>">
+
+                        <!-- Name error message -->
+                        <?php if ($nameErr) { ?>
+                        <div class="ui negative message">
+                            <div class="header">
+                                Error!
+                            </div>
+                            <p><?php echo $nameErr; ?></p>
+                        </div>
+                        <?php } ?>
                     </div>
 
                     <!-- Email -->
                     <div class="field">
-                        <label>Email address</label>
+                        <label>Email address*</label>
                         <input name="email" type="text" value="<?php echo $email; ?>">
 
                         <!-- Email error message -->
