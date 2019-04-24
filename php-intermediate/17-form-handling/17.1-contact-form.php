@@ -1,8 +1,43 @@
+<?php
+
+function filterEmail($field){
+
+    // Sanitize e-mail address
+    $field = filter_var(trim($field), FILTER_SANITIZE_EMAIL);
+    
+    // Validate e-mail address
+    if(filter_var($field, FILTER_VALIDATE_EMAIL)){
+        return $field;
+    } else{
+        return FALSE;
+    }
+}
+
+$emailErr = "";
+$email = "";
+
+// Processing form data when form is submitted
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+        
+    // Validate email address
+    if(empty($_POST["email"])){
+        $emailErr = "Please enter your email address.";     
+    } else{
+        $email = filterEmail($_POST["email"]);
+
+        if($email == FALSE){
+            $emailErr = "Please enter a valid email address.";
+        }
+    }
+}
+
+?>
+
 <?php include("header.php")?>
 
 <body>
 
-  <?php include("menu.php")?>
+    <?php include("menu.php")?>
 
     <div class="ui container mt-90">
         <div class="ui grid">
@@ -16,14 +51,27 @@
                     width="85%">
             </div>
             <div class="eight wide computer eight wide tablet sixteen wide mobile column">
-                <form class="ui form" action="17.2-process-form.php" method="post">
+                <form class="ui form" action="17.1-contact-form.php" method="post">
                     <div class="field">
                         <label>Full name</label>
                         <input name="name" type="text">
                     </div>
+
+                    <!-- Email -->
                     <div class="field">
                         <label>Email address</label>
-                        <input  name="email" type="text">
+                        <input name="email" type="text" value="<?php echo $email; ?>">
+
+                        <!-- Email error message -->
+                        <?php if ($emailErr) { ?>
+                        <div class="ui negative message">
+                            <div class="header">
+                                Error!
+                            </div>
+                            <p><?php echo $emailErr; ?></p>
+                        </div>
+                        <?php } ?>
+
                     </div>
 
                     <div class="field">
@@ -50,6 +98,6 @@
 </html>
 
 <script>
-    $('.ui.checkbox')
+$('.ui.checkbox')
     .checkbox();
 </script>
