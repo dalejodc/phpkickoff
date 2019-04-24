@@ -54,10 +54,12 @@ function filterMessage($field){
 }
 
 /* =================================================
-      Processing form data when form is submitted
-   =================================================*/ 
+Processing form data when form is submitted
+=================================================*/ 
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    // header('Location: http://localhost/phpkickoff/php-intermediate/17-form-handling/17.2-process-form.php');
 
     // Validate name
     if(empty($_POST["name"])){
@@ -68,18 +70,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $nameErr = "Please enter a valid name.";
         }
     }
-        
+    
     // Validate email address
     if(empty($_POST["email"])){
         $emailErr = "Please enter your email address.";     
     } else{
         $email = filterEmail($_POST["email"]);
-
+        
         if($email == FALSE){
             $emailErr = "Please enter a valid email address.";
         }
     }
-
+    
     // Validate message
     if(empty($_POST["message"])){
         $messageErr = "Please enter your message.";     
@@ -89,9 +91,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $messageErr = "Please enter a valid message.";
         }
     }
-
-    if(empty($nameErr) && empty($emailErr) && empty($messageErr)){
-        window.location.replace("http://localhost/phpkickoff/php-intermediate/17-form-handling/17.2-process-form.php");
+    
+    // header('Location: http://localhost/phpkickoff/php-intermediate/17-form-handling/17.2-process-form.php');
+    if(true){
     }
 }
 
@@ -115,7 +117,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     width="85%">
             </div>
             <div class="eight wide computer eight wide tablet sixteen wide mobile column">
-                <form class="ui form" action="17.1-contact-form.php" method="post">
+                <form class="ui form" action="17.2-process-form.php" method="post">
 
                     <!-- Full name -->
                     <div class="field">
