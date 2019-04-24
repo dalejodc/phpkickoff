@@ -4,10 +4,12 @@
              Variables
    =====================================*/ 
 
-$nameErr = "";
 $name = "";
-$emailErr = "";
+$nameErr = "";
 $email = "";
+$emailErr = "";
+$message ="";
+$messageErr ="";
 
 /* =====================================
      Functions to filter user inputs
@@ -39,6 +41,18 @@ function filterEmail($field){
     }
 }
 
+function filterMessage($field){
+    
+    // Sanitize message
+
+    $field = filter_var(trim($field), FILTER_SANITIZE_STRING);
+    if(!empty($field)){
+        return $field;
+    } else{
+        return FALSE;
+    }
+}
+
 /* =================================================
       Processing form data when form is submitted
    =================================================*/ 
@@ -64,6 +78,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         if($email == FALSE){
             $emailErr = "Please enter a valid email address.";
         }
+    }
+
+    // Validate message
+    if(empty($_POST["message"])){
+        $messageErr = "Please enter your message.";     
+    } else{
+        $message = filterString($_POST["message"]);
+        if($message == FALSE){
+            $messageErr = "Please enter a valid message.";
+        }
+    }
+
+    if(empty($nameErr) && empty($emailErr) && empty($messageErr)){
+        window.location.replace("http://localhost/phpkickoff/php-intermediate/17-form-handling/17.2-process-form.php");
     }
 }
 
@@ -123,8 +151,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     </div>
 
                     <div class="field">
-                        <label>Message</label>
-                        <textarea></textarea>
+                         <!-- Email -->
+                        <label>Message*</label>
+                        <textarea name="message" type="text" value="<?php echo $message; ?>"></textarea>
+
+                        <!-- Message error message -->
+                        <?php if ($messageErr) { ?>
+                        <div class="ui negative message">
+                            <div class="header">
+                                Error!
+                            </div>
+                            <p><?php echo $messageErr; ?></p>
+                        </div>
+                        <?php } ?>
                     </div>
 
                     <div class="field mt-30">
